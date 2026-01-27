@@ -1,0 +1,20 @@
+# macOS-specific requirements
+pyperclip
+mss
+Pillow
+pynput
+psutil
+flask
+websockets
+pyobjc
+pyobjc-core
+pyobjc-framework-Cocoa
+pyobjc-framework-Quartz
+pyobjc-framework-QuartzCore
+pyobjc-framework-CoreGraphics
+pyobjc-framework-CoreImage
+
+# Optional: Add these if you need additional features
+# cryptography  # for enhanced encryption
+# numpy  # for ML features
+# scikit-learn  # for anomaly detection 

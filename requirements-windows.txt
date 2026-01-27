@@ -1,0 +1,14 @@
+# Windows-specific requirements
+pyperclip
+mss
+Pillow
+pynput
+psutil
+flask
+websockets
+pywin32
+
+# Optional: Add these if you need additional features
+# cryptography  # for enhanced encryption
+# numpy  # for ML features
+# scikit-learn  # for anomaly detection 

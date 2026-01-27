@@ -1,0 +1,17 @@
+# config/settings.yaml
+
+logging:
+  keystroke_interval: 0.01
+  clipboard_interval: 1.0
+  screen_capture_interval: 60
+  mouse_interval: 0.01
+
+database:
+  path: data/logs.db
+  encryption_password: your-strong-password
+
+features:
+  enable_screen_capture: true
+  enable_network_monitor: true
+  enable_anomaly_detection: true
+  enable_script_detection: true

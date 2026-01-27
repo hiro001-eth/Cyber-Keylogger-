@@ -1,0 +1,10 @@
+sudo
+drop table
+rm -rf
+powershell
+Invoke-Expression
+eval
+exec
+os.system
+subprocess
+cmd.exe

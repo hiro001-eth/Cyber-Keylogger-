@@ -1,0 +1,288 @@
+{% extends 'layout.html' %}
+
+{% block title %}CyberGuard - Super Admin Dashboard{% endblock %}
+{% block page_title %}Super Admin Command Center{% endblock %}
+
+{% block topbar_center %}
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="position: relative; min-width: 260px;">
+            <input
+                type="text"
+                placeholder="Search users, endpoints, alerts..."
+                style="width: 100%; padding: 8px 28px 8px 12px; border-radius: 999px; border: 1px solid rgba(45,53,97,0.9); background: rgba(10,14,39,0.9); color: var(--cg-text); font-size: 12px;"
+            />
+            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--cg-text-muted);">⌕</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;">
+            <div class="cg-status-pill cg-status-ok" style="background: rgba(0,240,255,0.08); color: var(--cg-primary);">
+                <span class="cg-status-dot" style="background: var(--cg-primary); box-shadow: 0 0 10px rgba(0,240,255,0.8);"></span>
+                <span>Total Endpoints Online</span>
+                <span style="font-weight: 600; margin-left: 4px;" id="cg-topbar-endpoints">--</span>
+            </div>
+            <div class="cg-status-pill" style="background: rgba(255,0,66,0.08); color: var(--cg-danger);">
+                <span class="cg-status-dot" style="background: var(--cg-danger); box-shadow: 0 0 10px rgba(255,0,66,0.8);"></span>
+                <span>Active Threats</span>
+                <span style="font-weight: 600; margin-left: 4px;" id="cg-topbar-threats">--</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="cg-grid cg-grid-4">
+        <div class="cg-card">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Active Endpoints</div>
+                </div>
+                <div class="cg-badge-dot green"></div>
+            </div>
+            <div class="cg-card-metric cg-metric-lg" id="cg-active-endpoints">--</div>
+            <div class="cg-chip cg-chip-up">
+                <span>↑ 23</span>
+                <span>since yesterday</span>
+            </div>
+        </div>
+
+        <div class="cg-card">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Active Threats</div>
+                </div>
+                <div class="cg-badge-dot red"></div>
+            </div>
+            <div class="cg-card-metric cg-metric-lg" id="cg-active-threats">--</div>
+            <div class="cg-chip cg-chip-down">
+                <span>12 resolved</span>
+                <span>today</span>
+            </div>
+        </div>
+
+        <div class="cg-card">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Workforce Productivity</div>
+                </div>
+                <div class="cg-badge-dot green"></div>
+            </div>
+            <div class="cg-card-metric" id="cg-workforce-productivity">87%</div>
+            <div class="cg-chip cg-chip-up">
+                <span>↑ 3%</span>
+                <span>this week</span>
+            </div>
+        </div>
+
+        <div class="cg-card">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Encrypted Data</div>
+                </div>
+                <div class="cg-badge-dot"></div>
+            </div>
+            <div class="cg-card-metric" id="cg-data-protected">2.4 TB</div>
+            <div class="cg-chip">
+                <span>124 files</span>
+                <span>flagged today</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="cg-grid cg-grid-4">
+        <div class="cg-card" style="grid-column: span 3; min-height: 320px;">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Global Endpoint Distribution</div>
+                </div>
+                <button class="cg-btn-primary" type="button">
+                    <span>Live View</span>
+                </button>
+            </div>
+            <div id="cg-network-map-placeholder" style="height: 260px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--cg-text-muted); border-radius: 12px; border: 1px dashed rgba(45, 53, 97, 0.8);">
+                3D network globe placeholder – integrate Three.js or WebGL view here.
+            </div>
+        </div>
+
+        <div class="cg-card" style="min-height: 320px;">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Live Activity Stream</div>
+                </div>
+            </div>
+            <div id="cg-activity-feed" class="cg-activity-feed"></div>
+        </div>
+    </div>
+
+    <div class="cg-grid cg-grid-4">
+        <div class="cg-card" style="grid-column: span 2; min-height: 260px;">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Network Traffic Trends</div>
+                </div>
+            </div>
+            <canvas id="cg-network-traffic-chart" height="140"></canvas>
+        </div>
+
+        <div class="cg-card" style="grid-column: span 2; min-height: 260px;">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Security Incidents Timeline</div>
+                </div>
+            </div>
+            <div id="cg-threat-timeline" style="font-size: 12px; max-height: 200px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <div class="cg-grid cg-grid-4">
+        <div class="cg-card" style="grid-column: span 1; min-height: 260px;">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Most Used Applications</div>
+                </div>
+            </div>
+            <div style="font-size: 11px; color: var(--cg-text-muted); margin-bottom: 8px;">Today · Top 5</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <div>VSCode</div>
+                    <div style="width: 60%; height: 6px; border-radius: 999px; background: rgba(45,53,97,0.9); overflow:hidden;">
+                        <div style="width: 80%; height:100%; background: linear-gradient(90deg,#00FF41,#00F0FF);"></div>
+                    </div>
+                    <div style="font-size: 11px;">3h 20m</div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <div>Chrome</div>
+                    <div style="width: 60%; height: 6px; border-radius: 999px; background: rgba(45,53,97,0.9); overflow:hidden;">
+                        <div style="width: 65%; height:100%; background: linear-gradient(90deg,#0EA5E9,#8B5CF6);"></div>
+                    </div>
+                    <div style="font-size: 11px;">2h 45m</div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <div>Excel</div>
+                    <div style="width: 60%; height: 6px; border-radius: 999px; background: rgba(45,53,97,0.9); overflow:hidden;">
+                        <div style="width: 50%; height:100%; background: linear-gradient(90deg,#00FF41,#FFB800);"></div>
+                    </div>
+                    <div style="font-size: 11px;">1h 30m</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cg-card" style="grid-column: span 1; min-height: 260px;">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Productivity Leaders</div>
+                </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:12px;">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:14px;">🥇</span>
+                        <div>
+                            <div>John Doe</div>
+                            <div style="font-size:11px; color:var(--cg-text-muted);">Engineering</div>
+                        </div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:12px;">95/100</div>
+                        <div style="margin-top:4px; width:80px; height:6px; border-radius:999px; background:rgba(45,53,97,0.9); overflow:hidden;">
+                            <div style="width:95%; height:100%; background: linear-gradient(90deg,#FBBF24,#F97316);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:14px;">🥈</span>
+                        <div>
+                            <div>Jane Smith</div>
+                            <div style="font-size:11px; color:var(--cg-text-muted);">Marketing</div>
+                        </div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:12px;">89/100</div>
+                        <div style="margin-top:4px; width:80px; height:6px; border-radius:999px; background:rgba(45,53,97,0.9); overflow:hidden;">
+                            <div style="width:89%; height:100%; background: linear-gradient(90deg,#E5E7EB,#9CA3AF);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cg-card" style="grid-column: span 2; min-height: 260px;">
+            <div class="cg-card-header">
+                <div>
+                    <div class="cg-card-title">Infrastructure Health</div>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:16px; font-size:12px;">
+                <div style="text-align:center;">
+                    <div style="margin-bottom:8px;">Server CPU</div>
+                    <div style="width:72px; height:72px; border-radius:999px; border:4px solid var(--cg-success); margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:13px;">34%</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="margin-bottom:8px;">Memory</div>
+                    <div style="width:72px; height:72px; border-radius:999px; border:4px solid var(--cg-warning); margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:11px;">2.1 / 8 GB</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="margin-bottom:8px;">Storage</div>
+                    <div style="width:72px; height:72px; border-radius:999px; border:4px solid var(--cg-primary); margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:11px;">9% used</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cg-bottom-notification" style="position: fixed; left: 0; right: 0; bottom: 0; padding: 8px 24px; display: none; align-items: center; justify-content: space-between; font-size: 12px; background: rgba(15,23,42,0.96); border-top: 1px solid rgba(45,53,97,0.9); z-index: 40;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span id="cg-bottom-notification-icon">ℹ️</span>
+            <span id="cg-bottom-notification-message">System message</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="cg-btn-primary" style="padding:6px 10px; font-size:11px;" id="cg-bottom-notification-action" hidden>Action</button>
+            <button type="button" class="cg-icon-btn" style="width:28px; height:28px; font-size:12px;" onclick="this.parentElement.parentElement.style.display='none';">✕</button>
+        </div>
+    </div>
+
+    <div class="cg-card">
+        <div class="cg-card-header">
+            <div>
+                <div class="cg-card-title">Quick Actions</div>
+            </div>
+        </div>
+        <div class="cg-quick-actions">
+            <div class="cg-quick-action" data-action="add-employee">
+                <div class="cg-quick-action-icon">👤➕</div>
+                <div>Add Employee</div>
+            </div>
+            <div class="cg-quick-action" data-action="deploy-agent">
+                <div class="cg-quick-action-icon">☁️⬇️</div>
+                <div>Deploy Agent</div>
+            </div>
+            <div class="cg-quick-action" data-action="generate-report">
+                <div class="cg-quick-action-icon">📄📊</div>
+                <div>Generate Report</div>
+            </div>
+            <div class="cg-quick-action" data-action="block-endpoint">
+                <div class="cg-quick-action-icon">💻⛔</div>
+                <div>Block Endpoint</div>
+            </div>
+            <div class="cg-quick-action" data-action="configure-alerts">
+                <div class="cg-quick-action-icon">🔔⚙️</div>
+                <div>Configure Alerts</div>
+            </div>
+            <div class="cg-quick-action" data-action="run-scan">
+                <div class="cg-quick-action-icon">🛡️🔍</div>
+                <div>Run Security Scan</div>
+            </div>
+            <div class="cg-quick-action" data-action="export-data">
+                <div class="cg-quick-action-icon">🗄️⬇️</div>
+                <div>Export Data</div>
+            </div>
+            <div class="cg-quick-action" data-action="system-backup">
+                <div class="cg-quick-action-icon">🖴⏱️</div>
+                <div>System Backup</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,15 @@
+# Linux-compatible dependencies
+pyperclip
+mss
+Pillow
+pynput
+psutil
+flask
+websockets
+pycryptodome
+PyJWT
+
+# Optional: Add these if you need additional features
+# cryptography  # for enhanced encryption
+# numpy  # for ML features
+# scikit-learn  # for anomaly detection
