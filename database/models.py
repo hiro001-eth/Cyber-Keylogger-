@@ -182,10 +182,10 @@ class DatabaseModels:
             ''')
             
             # Create default super admin user with proper password hash
-            admin_password_hash = self.hash_password('P@$$word123')
+            admin_password_hash = self.hash_password('admin123')
             cursor.execute('''
                 INSERT OR IGNORE INTO users (username, email, password_hash, role, employee_code, status)
-                VALUES ('superadmin_@gmail.com', 'superadmin_@gmail.com', ?, 'admin', 'ADMIN001', 'active')
+                VALUES ('admin', 'admin@cyberguard.local', ?, 'admin', 'ADMIN001', 'active')
             ''', (admin_password_hash,))
             
             # Create default settings

@@ -1,0 +1,87 @@
+Phase 1 – High‑Level Backend Design
+[1] Define v2 architecture (doc only)
+Create ARCHITECTURE.md with:
+Agent (keylogger) → API backend → DB → detection → dashboard flow.
+Separation of components: agent, api, detection-worker, dashboard.
+Data flow diagrams for:
+Keystrokes / events ingestion
+Alerts creation and retrieval.
+[2] Design enterprise domain model
+In the same doc or separate DOMAIN_MODEL.md, define entities:
+Organization / Company
+User (admin, analyst, employee)
+Endpoint / Device (machine that runs the agent)
+Event (keystroke, clipboard, mouse, screen, etc.)
+Alert
+AuditLog
+Map these to DB tables (even if you still use SQLite now).
+[3] Backend API surface (spec, not code)
+Draft an OpenAPI‑style list of endpoints:
+/api/auth/login, /api/auth/refresh
+/api/events/ingest (for agents)
+/api/stats/overview, /api/stats/user/{id}
+/api/alerts, /api/alerts/{id}
+/api/admin/users, /api/admin/endpoints
+For each: method, request body, response JSON, auth required.
+Phase 2 – Core Backend Functionality
+[4] Normalize DB access layer
+Wrap raw sqlite3 usage in a small repository/service layer so:
+DBManager handles inserts/queries.
+Future swap to Postgres/MySQL is easier.
+Add functions like:
+create_alert(event_id, rule_id, severity, message)
+get_events_for_user(user_id, time_range)
+[5] Harden AuthManager
+Add:
+Password policy check (min length, complexity).
+Basic login rate‑limiting per IP/username (in DB or memory).
+Configurable token expiry via env.
+Ensure:
+All admin endpoints use admin_required.
+Error messages don’t leak details (“Invalid credentials” only).
+[6] Event ingestion API (for agents)
+Implement a backend endpoint (even if internal for now), e.g.:
+POST /api/events/ingest
+Accepts batched events:
+type (keystroke, clipboard, mouse, screen)
+endpoint_id, user_id, timestamp, payload
+Calls DBManager to store them with encryption where needed.
+[7] Stats & reporting APIs
+Turn current dashboard queries into clear APIs:
+GET /api/stats – overall counts, today’s activity, active alerts.
+GET /api/users/{id}/activity – last N events for a user.
+Use these APIs from your Flask views (even if same process).
+[8] Detection pipeline (rule‑based first)
+In detection/:
+Implement a simple function: run_detection_for_event(event):
+Applies a few rules (e.g. high frequency, sensitive window titles).
+If triggered → write row to alerts table via DBManager.
+Hook it into:
+DBManager.insert_* or the ingest API so alerts are created on write.
+Phase 3 – Config, Security, and Observability
+[9] Central config module
+Create config/settings.py (or similar) that reads only from env:
+SECRET_KEY
+DB_PATH or DB URL
+ENCRYPTION_PASSWORD
+Token expiry, rate limit values
+Replace:
+Hardcoded 'password' and 'your-super-secret-key...' usages.
+[10] Backend security hardening
+In Flask app factory:
+Set SESSION_COOKIE_HTTPONLY = True
+Set SESSION_COOKIE_SECURE = True (for HTTPS)
+Add CSRF protection middleware/token.
+Make sure all modify actions (create user, change status, etc.) go through:
+Auth checks
+Audit logging (who did what and when).
+[11] Logging & healthchecks
+Replace print() with Python logging:
+Module‑level logger, levels (INFO/WARN/ERROR).
+Add:
+GET /health endpoint that checks DB connectivity and returns {"status": "ok"}.
+[12] Minimal backend tests
+Add simple tests for:
+AuthManager.hash_password + verify_password
+DBManager.insert_keystroke + get_dashboard_stats
+This makes backend changes safer as you grow.

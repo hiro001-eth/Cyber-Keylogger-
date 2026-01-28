@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CyberGuard Enterprise - Secure Access Portal</title>
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo cyberguard (1).png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
         .cg-login-shell {
@@ -29,28 +29,26 @@
             padding: 40px 48px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
-        #cg-3d-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            filter: drop-shadow(0 0 24px rgba(0, 240, 255, 0.8));
-            opacity: 0.9;
+        .cg-login-logo-large {
+            max-width: 80%;
+            height: auto;
+            margin-bottom: 20px;
         }
         .cg-login-hero-title {
             font-size: 32px;
             letter-spacing: 2px;
             text-transform: uppercase;
+            text-align: center;
         }
         .cg-login-hero-sub {
             margin-top: 8px;
             font-size: 14px;
             color: var(--cg-text-muted);
+            text-align: center;
         }
         .cg-login-right {
             display: flex;
@@ -60,7 +58,7 @@
         }
         .cg-login-panel {
             width: 100%;
-            max-width: 420px;
+            max-width: 380px;
             background: rgba(26, 31, 58, 0.9);
             border-radius: 20px;
             border: 1px solid rgba(45, 53, 97, 0.9);
@@ -75,8 +73,8 @@
             margin-bottom: 24px;
         }
         .cg-login-logo-mark {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             border-radius: 999px;
             background: radial-gradient(circle at 30% 0%, #00F0FF, #1A1F3A);
             display: flex;
@@ -85,11 +83,12 @@
             font-weight: 700;
             letter-spacing: 2px;
             margin-bottom: 12px;
+            overflow: hidden;
         }
         .cg-login-logo-img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .cg-login-title {
             font-size: 20px;
@@ -138,13 +137,6 @@
             font-size: 14px;
             color: var(--cg-text-muted);
         }
-        .cg-login-footer-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            font-size: 12px;
-        }
         .cg-login-meta {
             margin-top: 18px;
             font-size: 11px;
@@ -181,51 +173,6 @@
             background: rgba(255, 0, 66, 0.08);
             color: var(--cg-danger);
         }
-        .cg-dept-select {
-            min-width: 160px;
-        }
-        .cg-login-body {
-            display: grid;
-            grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-            gap: 20px;
-            align-items: flex-start;
-            margin-top: 8px;
-        }
-        .cg-login-form-col,
-        .cg-login-dept-col {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        .cg-dept-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .cg-dept-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 10px;
-            border-radius: 999px;
-            border: 1px solid rgba(45, 53, 97, 0.9);
-            background: rgba(10, 14, 39, 0.9);
-            font-size: 12px;
-            cursor: pointer;
-            transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
-        }
-        .cg-dept-pill:hover {
-            border-color: var(--cg-primary);
-            background: rgba(0, 240, 255, 0.08);
-            transform: translateY(-1px);
-        }
-        .cg-dept-pill input[type="radio"] {
-            accent-color: var(--cg-primary);
-        }
-        .cg-form-help {
-            font-size: 11px;
-            color: var(--cg-text-muted);
-        }
         @media (max-width: 960px) {
             .cg-login-shell {
                 grid-template-columns: minmax(0, 1fr);
@@ -236,9 +183,6 @@
             .cg-login-right {
                 padding: 24px 16px;
             }
-            .cg-login-body {
-                grid-template-columns: minmax(0, 1fr);
-            }
         }
     </style>
 </head>
@@ -246,17 +190,12 @@
     <canvas id="cg-rain-canvas"></canvas>
     <div class="cg-login-shell">
         <div class="cg-login-left">
-            <canvas id="cg-3d-canvas"></canvas>
-            <div>
-                <div class="cg-login-hero-title">CyberGuard Enterprise Security Platform</div>
-                <div class="cg-login-hero-sub">One-time perpetual license · Zero subscriptions · Self-hosted · Unlimited endpoints</div>
-            </div>
-            <div>
-                <div class="cg-badge-row">
-                    <div class="cg-badge">256-bit AES Encryption</div>
-                    <div class="cg-badge">Zero Trust Architecture</div>
-                    <div class="cg-badge">Multi-Factor Auth</div>
-                </div>
+            <img src="{{ url_for('static', filename='image/logo.png') }}" alt="CyberGuard Enterprise" class="cg-login-logo-large">
+            <div class="cg-login-hero-sub">One-time perpetual license · Zero subscriptions · Self-hosted · Unlimited endpoints</div>
+            <div class="cg-badge-row">
+                <div class="cg-badge">256-bit AES Encryption</div>
+                <div class="cg-badge">Zero Trust Architecture</div>
+                <div class="cg-badge">Multi-Factor Auth</div>
             </div>
         </div>
 
@@ -264,7 +203,7 @@
             <div class="cg-login-panel">
                 <div class="cg-login-logo">
                     <div class="cg-login-logo-mark">
-                        <img src="{{ url_for('static', filename='image/logo cyberguard (1).png') }}" alt="CyberGuard logo" class="cg-login-logo-img">
+                        <img src="{{ url_for('static', filename='image/logo.png') }}" alt="CyberGuard logo" class="cg-login-logo-img">
                     </div>
                     <div class="cg-login-title">CyberGuard Enterprise</div>
                     <div class="cg-login-subtitle">Secure Access Portal</div>
@@ -281,44 +220,25 @@
                 {% endwith %}
 
                 <form method="POST" action="{{ url_for('webapp_routes.login') }}">
-                    <div class="cg-login-body">
-                        <div class="cg-login-form-col">
-                            <div class="cg-form-group">
-                                <label class="cg-form-label" for="username">Username or Email</label>
-                                <div class="cg-input-wrap">
-                                    <input class="cg-input" type="text" id="username" name="username" required>
-                                    <span class="cg-input-icon">👤</span>
-                                </div>
-                            </div>
-
-                            <div class="cg-form-group">
-                                <label class="cg-form-label" for="password">Password</label>
-                                <div class="cg-input-wrap">
-                                    <input class="cg-input" type="password" id="password" name="password" required>
-                                    <span class="cg-input-icon">🔒</span>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="cg-btn-primary" style="width: 100%; justify-content: center; margin-top: 4px;">
-                                <span>Sign In Securely</span>
-                            </button>
-                        </div>
-
-                        <div class="cg-login-dept-col">
-                            <div class="cg-form-group">
-                                <label class="cg-form-label">Select Department</label>
-                                <div class="cg-dept-list">
-                                    {% for dept in departments %}
-                                        <label class="cg-dept-pill">
-                                            <input type="radio" name="department" value="{{ dept }}" {% if selected_department == dept %}checked{% endif %}>
-                                            <span>{{ dept }}</span>
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                                <div class="cg-form-help">Department selection is mandatory. Only one department can be active per session.</div>
-                            </div>
+                    <div class="cg-form-group">
+                        <label class="cg-form-label" for="username">Username or Email</label>
+                        <div class="cg-input-wrap">
+                            <input class="cg-input" type="text" id="username" name="username" autocomplete="username" required>
+                            <span class="cg-input-icon">&#128100;</span>
                         </div>
                     </div>
+
+                    <div class="cg-form-group">
+                        <label class="cg-form-label" for="password">Password</label>
+                        <div class="cg-input-wrap">
+                            <input class="cg-input" type="password" id="password" name="password" autocomplete="current-password" required>
+                            <span class="cg-input-icon">&#128274;</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="cg-btn-primary" style="width: 100%; justify-content: center; margin-top: 4px;">
+                        <span>Sign In Securely</span>
+                    </button>
                 </form>
 
                 <div class="cg-login-meta">
@@ -333,10 +253,10 @@
         <div class="cg-loader-content">
             <div class="cg-loader-ring">
                 <div class="cg-loader-logo">
-                    <img src="{{ url_for('static', filename='image/logo cyberguard (1).png') }}" alt="CyberGuard loading" class="cg-loader-logo-img">
+                    <img src="{{ url_for('static', filename='image/logo.png') }}" alt="CyberGuard loading" class="cg-loader-logo-img">
                 </div>
             </div>
-            <div class="cg-loader-text">Securing your CyberGuard session  </div>
+            <div class="cg-loader-text">Securing your CyberGuard session</div>
         </div>
     </div>
 
@@ -347,28 +267,18 @@
 
             if (form) {
                 form.addEventListener('submit', function (e) {
-                    const selectedDept = document.querySelector('input[name="department"]:checked');
-                    if (!selectedDept) {
-                        e.preventDefault();
-                        alert('Please select a department before logging in.');
-                        return;
-                    }
-
                     if (loader) {
                         loader.classList.add('cg-loader-visible');
                     }
                 });
             }
 
-            // Simple "AI-like" adjustment: slow machines get slower spinner for smoother perception
             try {
                 const cores = navigator.hardwareConcurrency || 4;
                 const baseDuration = 1.4;
                 const adjusted = Math.max(1.0, Math.min(2.2, baseDuration * (8 / cores)));
                 document.documentElement.style.setProperty('--cg-loader-duration', adjusted + 's');
-            } catch (err) {
-                // fallback is fine
-            }
+            } catch (err) {}
         })();
     </script>
     <script>
@@ -418,148 +328,6 @@
             window.addEventListener('resize', resize);
             resize();
             setInterval(draw, 60);
-        })();
-    </script>
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script>
-        (function () {
-            const canvas = document.getElementById('cg-3d-canvas');
-            if (!canvas || !window.BABYLON) {
-                return;
-            }
-
-            const engine = new BABYLON.Engine(canvas, true, {
-                preserveDrawingBuffer: true,
-                stencil: true,
-                disableWebGL2Support: false
-            });
-
-            const scene = new BABYLON.Scene(engine);
-            scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
-
-            const target = new BABYLON.Vector3(0, 0.5, 0);
-            const camera = new BABYLON.ArcRotateCamera('cgCamera', -Math.PI / 2.2, Math.PI / 2.6, 12, target, scene);
-            camera.inertia = 0.9;
-            camera.lowerRadiusLimit = 9;
-            camera.upperRadiusLimit = 14;
-            camera.panningSensibility = 0;
-            camera.useAutoRotationBehavior = true;
-            const baseAlpha = camera.alpha;
-            const baseBeta = camera.beta;
-            let orbitSpeedFactor = 1.0;
-            if (camera.autoRotationBehavior) {
-                camera.autoRotationBehavior.idleRotationSpeed = 0.18;
-                camera.autoRotationBehavior.idleRotationSpinUpTime = 2200;
-                camera.autoRotationBehavior.idleRotationWaitTime = 2200;
-            }
-
-            // Subtle hover parallax controlled by mouse + orbit speed control
-            // Listen on window so it still works with pointer-events: none on the canvas
-            window.addEventListener('mousemove', function (e) {
-                const rect = canvas.getBoundingClientRect();
-                const nx = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 .. 0.5
-                const ny = (e.clientY - rect.top) / rect.height - 0.5;
-                camera.alpha = baseAlpha + nx * 0.35;
-                camera.beta = baseBeta + ny * 0.25;
-
-                // Distance of cursor from center (0..~0.7). Near center -> slow/stop orbit.
-                const r = Math.sqrt(nx * nx + ny * ny);
-                if (r < 0.15) {
-                    orbitSpeedFactor = 0.0;
-                } else {
-                    orbitSpeedFactor = Math.min(1.0, (r - 0.15) * 2.2);
-                }
-            });
-
-            const hemiLight = new BABYLON.HemisphericLight('cgHemi', new BABYLON.Vector3(0, 1, 0), scene);
-            hemiLight.intensity = 0.55;
-
-            const spot = new BABYLON.SpotLight('cgSpot', new BABYLON.Vector3(-6, 7, -4), new BABYLON.Vector3(0, -1, 1), Math.PI / 2.2, 16, scene);
-            spot.intensity = 5.5;
-
-            const shield = BABYLON.MeshBuilder.CreateSphere('cgShield', { diameter: 3.2, segments: 64 }, scene);
-            const shieldMat = new BABYLON.StandardMaterial('cgShieldMat', scene);
-            shieldMat.emissiveColor = new BABYLON.Color3(0.0, 0.75, 0.95);
-            shieldMat.diffuseColor = new BABYLON.Color3(0.02, 0.08, 0.16);
-            shieldMat.alpha = 0.92;
-            shield.material = shieldMat;
-
-            const ring = BABYLON.MeshBuilder.CreateTorus('cgRing', { diameter: 7, thickness: 0.06, tessellation: 80 }, scene);
-            const ringMat = new BABYLON.StandardMaterial('cgRingMat', scene);
-            ringMat.emissiveColor = new BABYLON.Color3(0.0, 0.55, 0.9);
-            ringMat.alpha = 0.7;
-            ring.material = ringMat;
-            ring.position.y = 0.4;
-
-            const innerRing = BABYLON.MeshBuilder.CreateTorus('cgInnerRing', { diameter: 4.4, thickness: 0.08, tessellation: 56 }, scene);
-            const innerMat = new BABYLON.StandardMaterial('cgInnerMat', scene);
-            innerMat.emissiveColor = new BABYLON.Color3(0.0, 0.9, 0.5);
-            innerMat.alpha = 0.85;
-            innerRing.material = innerMat;
-            innerRing.rotation.x = Math.PI / 3.1;
-
-            const glowLayer = new BABYLON.GlowLayer('cgGlow', scene, { blurKernelSize: 24 });
-            glowLayer.intensity = 0.48;
-
-            // Network parent so nodes + links move together like an orbiting graph
-            const networkParent = new BABYLON.TransformNode('cgNetwork', scene);
-
-            const nodes = [];
-            const nodeCount = 22;
-            for (let i = 0; i < nodeCount; i++) {
-                const angle = (i / nodeCount) * Math.PI * 2;
-                const radius = 3.4 + (i % 3) * 0.25;
-                const node = BABYLON.MeshBuilder.CreateSphere('cgNode' + i, { diameter: 0.14 }, scene);
-                node.position = new BABYLON.Vector3(
-                    Math.cos(angle) * radius,
-                    0.5 + Math.sin(angle * 2.0) * 0.7,
-                    Math.sin(angle) * radius
-                );
-                node.parent = networkParent;
-                const nodeMat = new BABYLON.StandardMaterial('cgNodeMat' + i, scene);
-                nodeMat.emissiveColor = new BABYLON.Color3(0.0, 0.8, 1.0);
-                nodeMat.alpha = 0.9;
-                node.material = nodeMat;
-                nodes.push(node);
-            }
-
-            // Thin neon links between nearby nodes to form a network graph
-            const links = [];
-            const maxDist = 3.2;
-            for (let i = 0; i < nodes.length; i++) {
-                for (let j = i + 1; j < nodes.length; j++) {
-                    const a = nodes[i].position;
-                    const b = nodes[j].position;
-                    const dist = BABYLON.Vector3.Distance(a, b);
-                    if (dist < maxDist) {
-                        const line = BABYLON.MeshBuilder.CreateLines('cgLink' + i + '_' + j, { points: [a, b] }, scene);
-                        line.parent = networkParent;
-                        line.color = new BABYLON.Color3(0.0, 0.9, 1.0);
-                        line.alpha = 0.25;
-                        links.push(line);
-                    }
-                }
-            }
-
-            scene.registerBeforeRender(function () {
-                const t = performance.now() * 0.001;
-                shield.rotation.y += 0.0028;
-                shield.rotation.x = 0.18 + Math.sin(t * 0.7) * 0.06;
-                ring.rotation.y += 0.0045;
-                innerRing.rotation.y -= 0.003;
-                const baseOrbit = 0.0022;
-                networkParent.rotation.y += baseOrbit * orbitSpeedFactor;
-            });
-
-            engine.runRenderLoop(function () {
-                if (scene.activeCamera) {
-                    scene.render();
-                }
-            });
-
-            window.addEventListener('resize', function () {
-                engine.resize();
-            });
         })();
     </script>
 </body>

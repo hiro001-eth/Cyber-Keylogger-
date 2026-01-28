@@ -12,29 +12,21 @@ def home():
 
 @webapp_routes.route('/login', methods=['GET', 'POST'])
 def login():
-    departments = ['Sales', 'HR', 'Networking', 'IT']
-
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        department = request.form.get('department', '').strip()
-
-        if not department:
-            flash('Please select a department before logging in.', 'error')
-            return render_template('login_cg.html', departments=departments, selected_department=None)
         
         result = auth_manager.login_user(username, password)
         
         if result['success']:
             session['user_token'] = result['token']
             session['user'] = result['user']
-            session['department'] = department
             flash('Login successful!', 'success')
             return redirect(url_for('webapp_routes.dashboard'))
         else:
             flash(result['message'], 'error')
 
-    return render_template('login_cg.html', departments=departments, selected_department=session.get('department'))
+    return render_template('login_cg.html')
 
 @webapp_routes.route('/dashboard')
 @login_required
