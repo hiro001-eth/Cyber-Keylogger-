@@ -64,7 +64,7 @@ if __name__ == '__main__':
     port = 5000
     print(f"Starting server on http://0.0.0.0:{port}")
     print("Dashboard: http://0.0.0.0:5000")
-    print("Login with: superadmin_@gmail.com / P@$$word123")
+    print("Login with: admin / admin123")
     print("Press Ctrl+C to stop the server")
     
     try:

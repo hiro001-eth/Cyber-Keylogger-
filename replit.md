@@ -1,4 +1,4 @@
-# CyberKeylogger Pro - CyberGuard Enterprise Security Platform
+# CyberGuard Enterprise Security Platform
 
 ## Overview
 A Flask-based enterprise security monitoring and employee activity tracking dashboard. The web application provides authentication, employee management, and activity monitoring capabilities.
@@ -18,16 +18,17 @@ python main.py
 ```
 
 ## Default Login Credentials
-- **Email/Username:** superadmin_@gmail.com
-- **Password:** P@$$word123
+- **Username:** admin
+- **Password:** admin123
 
 ## Key Features
 - User authentication with JWT tokens
 - Role-based access (admin/employee)
-- Department-based organization
 - Dashboard with activity statistics
 - Employee management (admin only)
 - Alerts monitoring
+- 256-bit AES encryption for data
+- Zero Trust Architecture design
 
 ## Database
 Uses SQLite stored in `data/logs.db`. Tables include:
@@ -40,6 +41,9 @@ Uses SQLite stored in `data/logs.db`. Tables include:
 - Local logging services are designed for desktop environments
 
 ## Recent Changes
+- 2026-01-28: Updated login page with new CyberGuard Enterprise logo
+- 2026-01-28: Removed department selection from login (will be added later)
+- 2026-01-28: Changed admin credentials to admin/admin123
 - 2026-01-28: Initial setup for Replit environment
 - Changed server to bind to 0.0.0.0:5000 for Replit compatibility
 - Made pynput imports optional to allow dashboard to run
