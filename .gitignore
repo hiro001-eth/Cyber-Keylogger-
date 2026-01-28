@@ -22,3 +22,11 @@ logs/
 # Build / cache
 dist/
 build/
+
+# Replit
+.pythonlibs/
+.cache/
+.upm/
+
+# Database files (local SQLite)
+data/*.db
