@@ -10,3 +10,11 @@ PyJWT
 
 # pynput requires kernel headers and is optional for web dashboard
 # pynput
+flask
+mss
+Pillow
+psutil
+pycryptodome
+PyJWT
+pyperclip
+websockets
