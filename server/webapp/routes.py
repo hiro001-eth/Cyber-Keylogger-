@@ -19,9 +19,9 @@ def login():
         result = auth_manager.login_user(username, password)
         
         if result['success']:
+            session.permanent = True
             session['user_token'] = result['token']
             session['user'] = result['user']
-            flash('Login successful!', 'success')
             return redirect(url_for('webapp_routes.dashboard'))
         else:
             flash(result['message'], 'error')
