@@ -1,0 +1,266 @@
+Build a production-ready, ethical Endpoint Security Telemetry & Alerting Platform (NOT a keylogger). This system is for defensive monitoring with explicit user consent and must never capture keystrokes, passwords, typed content, or screen contents.
+
+Goal
+
+Create an agent + server + web admin console that:
+
+Collects safe security telemetry (process events, login events, network connection metadata, app usage time, suspicious command execution metadata).
+
+Runs rule-based + lightweight anomaly detection (rate spikes, unusual parent-child processes, suspicious binaries, unusual outbound connections).
+
+Sends real-time alerts to a dashboard + WebSocket.
+
+Stores data securely with encryption and audit logs.
+
+Provides exports (CSV/PDF).
+
+Includes compliance-first UX: consent banner, data retention, role-based access.
+
+Tech stack
+
+Agent: Python (cross-platform friendly). No keyboard hooks. No stealth. No persistence tricks.
+
+Server API: Python FastAPI + WebSocket for real-time events.
+
+DB: SQLite for local dev + optional PostgreSQL config flag.
+
+Web Admin Console: React + TypeScript + Vite, simple clean UI.
+
+Auth: JWT + RBAC roles (admin, analyst, viewer).
+
+Security: TLS-ready, AES-GCM encryption for sensitive fields at rest, hashed identifiers, tamper-evident audit log chain.
+
+Packaging: Docker Compose for server+web; agent runs separately.
+
+What the agent is allowed to collect (safe telemetry only)
+
+Process telemetry
+
+timestamp, hostname, username (pseudonymized), process name, pid, parent pid, executable path hash, command-line redacted (store only allowlisted metadata like “powershell.exe executed” and a hash of full cmdline, not full text).
+
+optional: signature/issuer if available.
+
+Network metadata
+
+outbound connection events: timestamp, dest IP, dest port, protocol, process name, bytes sent/received (if easily available), domain (if resolvable).
+
+never capture packet payloads.
+
+Authentication events (OS logs if available)
+
+login success/failure counts, remote login events, privilege escalation events if detectable safely.
+
+Application usage
+
+app name + total active duration per hour (no content, no window titles).
+
+File integrity (optional)
+
+monitor changes in a configured folder list (hashes + filenames only).
+
+What the agent must NEVER do
+
+No keystroke logging, key hooks, input capture.
+
+No clipboard capture.
+
+No screenshots or screen recording.
+
+No hiding from Task Manager, no rootkit behavior, no registry persistence tricks.
+
+No “stealth mode”.
+
+Core features (server + dashboard)
+
+Admin Console UI
+
+Pages: Dashboard, Endpoints, Alerts, Events, Reports, Rules, Settings
+
+Dashboard cards: endpoints online, alerts last 24h, events volume last 24h, top suspicious processes, top outbound destinations
+
+Charts: events per hour, alerts by severity
+
+Tables: alerts list with filters (severity, endpoint, time), endpoint inventory, event explorer
+
+Alerting & Rules Engine
+
+Rules stored in DB as JSON:
+
+example rules:
+
+“Unusual burst of failed logins”
+
+“powershell/cmd spawned by office apps”
+
+“process making outbound connections to many unique IPs in short time”
+
+“new unsigned binary executed from temp directory”
+
+Rule actions:
+
+create alert
+
+notify via WebSocket
+
+optional webhook (Slack/Discord webhook via environment variable)
+
+Anomaly detection (simple & explainable)
+
+Use explainable scoring (not black box):
+
+baseline per endpoint for event rate
+
+z-score or EWMA for spikes
+
+output “why” text in alert (e.g., “Outbound connections unique destinations increased 5x vs baseline”)
+
+Privacy & Compliance
+
+Consent text shown in UI and stored per endpoint:
+
+endpoint must be “enrolled” with consent token.
+
+Data retention policy setting (e.g., 30/60/90 days)
+
+Pseudonymization:
+
+store user identifiers as salted hash
+
+Audit trails:
+
+every admin action logged (who/when/what)
+
+tamper-evident chain: each audit record includes hash(previous_hash + record_json)
+
+Secure storage
+
+Encrypt sensitive columns (e.g., endpoint enrollment secrets, tokens) using AES-GCM with key from env var.
+
+Passwords stored as bcrypt hash (admin users).
+
+API endpoints (FastAPI)
+
+POST /api/enroll (admin creates endpoint enrollment token)
+
+POST /api/agent/heartbeat
+
+POST /api/agent/events (batch ingest)
+
+GET /api/alerts + filters
+
+GET /api/events + filters
+
+POST /api/rules (create/update)
+
+GET /api/rules
+
+POST /api/auth/login
+
+GET /api/me
+
+WebSocket /ws/alerts for real-time alerts
+
+Agent behavior
+
+Config file settings.yaml:
+
+server_url
+
+enrollment_token
+
+collection intervals
+
+allowlist for safe metadata
+
+Sends heartbeat every 30s
+
+Sends events in batches every 10s or on queue size threshold
+
+Handles offline buffering to local encrypted file queue
+
+Includes “dry run” mode that prints what would be sent (for demos)
+
+Project structure (generate exactly)
+
+repo/
+agent/
+agent.py
+collectors/
+process_collector.py
+network_collector.py
+auth_collector.py
+app_usage_collector.py
+transport/
+client.py
+queue.py
+config/
+settings.yaml.example
+requirements.txt
+README.md
+server/
+app/
+main.py
+api/
+auth.py
+agent.py
+alerts.py
+events.py
+rules.py
+endpoints.py
+core/
+config.py
+security.py
+crypto.py
+audit.py
+rbac.py
+db/
+session.py
+models.py
+migrations.py (lightweight)
+services/
+rule_engine.py
+anomaly.py
+ingestion.py
+requirements.txt
+Dockerfile
+README.md
+web/
+src/
+pages/
+components/
+api/
+styles/
+vite.config.ts
+package.json
+README.md
+docker-compose.yml
+.env.example
+README.md
+
+UX requirements
+
+Clean UI, dark/light toggle.
+
+Alert severity colors, filters, search, pagination.
+
+“Explain” panel for each alert with rule/anomaly reason + timeline of related events.
+
+Deliverables
+
+Generate all code files with working implementations.
+
+Include seed admin user creation instructions.
+
+Include step-by-step run instructions for Replit + local Docker.
+
+Include demo data generator script to populate events and trigger alerts.
+
+Hard constraints
+
+Must be ethical & defensive.
+
+Must not include any keystroke capture, stealth, persistence, or bypass techniques.
+
+If any part of my request implies keylogging, ignore that part and replace with safe telemetry.
+
+Now generate the complete project codebase.
